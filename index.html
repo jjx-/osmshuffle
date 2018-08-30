@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>
+OSM Shuffle
+</title>
+<body style="border:0px; margin:0px;background:black">
+<script>
+//user defined values
+var lines = 7; //Breite
+var cols = 4; //Höhe
+var startx = 8539; //Startkachel X
+var starty = 5455; //Startkachel Y
+var zoom = 14; //Zoomstufe
+var servers = ["http://b.tile.openstreetmap.org/", "https://c.tile.opentopomap.org/", "https://stamen-tiles-b.a.ssl.fastly.net/toner/", "https://stamen-tiles-b.a.ssl.fastly.net/toner-lite/", "https://stamen-tiles-d.a.ssl.fastly.net/watercolor/", "http://tile-b.openstreetmap.fr/hot/", "https://c.tile.openstreetmap.de/tiles/osmde/", "http://tile.memomaps.de/tilegen/", "http://topo3.wanderreitkarte.de/topo/"];
+var servercount = 8;
+
+//Other stuff
+var line = 0;
+var col = 0;
+var tile = 0;
+var iline = 0;
+var icol = 0;
+var itile = 0;
+var xtile = 0;
+var ytile = 0;
+var oserver = 0;
+window.onload = function () {
+        initializemap()
+        setInterval(function() { 
+                // alle 3 Sekunden ausführen 
+                changetile(); 
+        }, 1000);
+}
+function changetile () {
+        line = rand(1, lines);
+        col = rand(1, cols);
+        tile = line * 10 + col;
+        xtile = startx + line;
+        ytile = starty + col;
+        oserver = rand(0, servercount);
+        console.log("Change tile " + tile + " to server " + oserver);
+        document.getElementById(tile).src= servers[oserver] + zoom + '/' + xtile + '/' + ytile +'.png';
+}
+function rand (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function initializemap () {
+        console.log("Initialize");
+        while ( icol != cols ) {
+                icol++;
+                while ( iline != lines ){
+                        iline++;
+                        itile = iline * 10 + icol;
+                        console.log("Create tile " + itile);
+                        xtile = startx + iline;
+                        ytile = starty + icol;
+                        document.write('<img id="' + itile + '" src="' + servers[0] + '/' + zoom + '/' + xtile + '/' + ytile +'.png">');
+                }
+                document.write('<br>');
+                iline = 0;
+        }
+}
+</script>
+<style>
+body{
+        margin:0px;
+        padding:0px;
+}
+img{
+        #border:1px solid red;
+        padding:0px;
+        margin:0px;
+}
+</style>
+
